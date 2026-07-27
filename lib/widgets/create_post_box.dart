@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/post_model.dart';
 
@@ -17,9 +17,10 @@ class CreatePostBox extends StatefulWidget {
 
 class _CreatePostBoxState extends State<CreatePostBox> {
   final TextEditingController _controller = TextEditingController();
-  File? selectedImage;
 
   final ImagePicker picker = ImagePicker();
+
+  File? selectedImage;
 
   Future<void> pickImage() async {
     final XFile? image =
@@ -33,78 +34,111 @@ class _CreatePostBoxState extends State<CreatePostBox> {
   }
 
   void createPost() {
-    if (_controller.text.trim().isEmpty && selectedImage == null) {
-      return;
-    }
+    if (_controller.text.trim().isEmpty && selectedImage == null) return;
 
-    final post = PostModel(
-      text: _controller.text.trim(),
-      imagePath: selectedImage?.path,
-      userName: "Shakil",
-      createdAt: DateTime.now(),
+    widget.onPost(
+      PostModel(
+        text: _controller.text.trim(),
+        imagePath: selectedImage?.path,
+        userName: "Shakil",
+        createdAt: DateTime.now(),
+      ),
     );
-
-    widget.onPost(post);
 
     setState(() {
       _controller.clear();
       selectedImage = null;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      elevation: 3,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(18),
       ),
       child: Padding(
         padding: const EdgeInsets.all(15),
         child: Column(
           children: [
-            TextField(
-              controller: _controller,
-              maxLines: 3,
-              decoration: const InputDecoration(
-                hintText: "What's on your mind?",
-                border: InputBorder.none,
-              ),
+            Row(
+              children: [
+                const CircleAvatar(
+                  radius: 24,
+                  child: Icon(Icons.person),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      hintText: "What's on your mind?",
+                      filled: true,
+                      fillColor: Colors.grey.shade100,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            if (selectedImage != null)
+
+            if (selectedImage != null) ...[
+              const SizedBox(height: 15),
               ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(15),
                 child: Image.file(
                   selectedImage!,
-                  height: 180,
+                  height: 220,
                   width: double.infinity,
                   fit: BoxFit.cover,
                 ),
               ),
+            ],
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 15),
 
+            const Divider(),
 
-    Row(
-    children: [
-    Expanded(
-    child: OutlinedButton.icon(
-    onPressed: pickImage,
-    icon: const Icon(Icons.photo),
-    label: const Text("Gallery"),
-    ),
-    ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                TextButton.icon(
+                  onPressed: pickImage,
+                  icon: const Icon(Icons.photo, color: Colors.green),
+                  label: const Text("Photo"),
+                ),
 
-    const SizedBox(width: 10),
+                TextButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.videocam, color: Colors.red),
+                  label: const Text("Video"),
+                ),
 
-    Expanded(
-    child: ElevatedButton.icon(
-    onPressed: createPost,
-    icon: const Icon(Icons.send),
-    label: const Text("POST"),
-    ),
-    ),
-    ],
-            ),
+                TextButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.emoji_emotions, color: Colors.orange),
+                  label: const Text("Feeling"),
+                ),
+
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff1877F2),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                  ),
+                  onPressed: createPost,
+                  icon: const Icon(Icons.send),
+                  label: const Text("Post"),
+                ),
+              ],
+            )
           ],
         ),
       ),

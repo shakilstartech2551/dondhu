@@ -35,9 +35,9 @@ class _PostCardState extends State<PostCard> {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      elevation: 3,
+      elevation: 6,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
         padding: const EdgeInsets.all(15),
@@ -47,9 +47,17 @@ class _PostCardState extends State<PostCard> {
             /// Header
             Row(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 22,
-                  child: Icon(Icons.person),
+                  backgroundColor: const Color(0xff1877F2),
+                  child: Text(
+                    widget.post.userName.substring(0, 1).toUpperCase(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 10),
 
@@ -122,11 +130,16 @@ class _PostCardState extends State<PostCard> {
             /// Image
             if (widget.post.imagePath != null)
               ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.file(
-                  File(widget.post.imagePath!),
-                  width: double.infinity,
-                  fit: BoxFit.contain,
+                borderRadius: BorderRadius.circular(15),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxHeight: 450,
+                  ),
+                  child: Image.file(
+                    File(widget.post.imagePath!),
+                    width: double.infinity,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
 
