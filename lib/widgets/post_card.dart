@@ -145,14 +145,45 @@ class _PostCardState extends State<PostCard> {
 
             const SizedBox(height: 15),
 
-            Text(
-              "$likeCount Likes",
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              children: [
+                const CircleAvatar(
+                  radius: 9,
+                  backgroundColor: Color(0xff1877F2),
+                  child: Icon(
+                    Icons.thumb_up,
+                    size: 11,
+                    color: Colors.white,
+                  ),
+                ),
+
+                const SizedBox(width: 6),
+
+                Text(
+                  "$likeCount",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
+                ),
+
+                const Spacer(),
+
+                const Text(
+                  "0 Comments",
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
             ),
 
-            const Divider(),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: Divider(
+                thickness: 1,
+              ),
+            ),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -239,7 +270,12 @@ class _PostCardState extends State<PostCard> {
                     );
                   },
                   icon: const Icon(Icons.comment_outlined),
-                  label: const Text("Comment"),
+                  label: const Text(
+                    "Comment",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
 
                 TextButton.icon(
@@ -251,7 +287,12 @@ class _PostCardState extends State<PostCard> {
                     );
                   },
                   icon: const Icon(Icons.share_outlined),
-                  label: const Text("Share"),
+                  label: const Text(
+                    "Share",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
               ],
             ),

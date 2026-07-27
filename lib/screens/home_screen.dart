@@ -92,21 +92,33 @@ const HomeHeader(),
     onPost: addPost,
   ),
 
-const Padding(
-padding: EdgeInsets.symmetric(horizontal: 16),
-child: Text(
-"Stories",
-style: TextStyle(
-fontSize: 22,
-fontWeight: FontWeight.bold,
-),
-),
-),
+  const Padding(
+    padding: EdgeInsets.symmetric(horizontal: 18),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "Stories",
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          "See All",
+          style: TextStyle(
+            color: Color(0xff1877F2),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    ),
+  ),
 
 const SizedBox(height: 10),
 
 SizedBox(
-height: 170,
+height: 195,
 child: ListView(
 scrollDirection: Axis.horizontal,
 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -128,16 +140,25 @@ children: [
 
 const SizedBox(height: 20),
 
-const Padding(
-padding: EdgeInsets.symmetric(horizontal: 16),
-child: Text(
-"Posts",
-style: TextStyle(
-fontSize: 22,
-fontWeight: FontWeight.bold,
-),
-),
-),
+  const Padding(
+    padding: EdgeInsets.symmetric(horizontal: 18),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "Latest Posts",
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Icon(
+          Icons.tune,
+          color: Colors.grey,
+        ),
+      ],
+    ),
+  ),
 
 const SizedBox(height: 10),
 
@@ -212,13 +233,13 @@ Widget build(BuildContext context) {
   ];
 
   return Scaffold(
-    backgroundColor: Colors.grey.shade100,
+    backgroundColor: const Color(0xffF3F5F7),
     body: pages[_selectedIndex],
     bottomNavigationBar: BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       currentIndex: _selectedIndex,
-      selectedItemColor: Colors.blue,
-      unselectedItemColor: Colors.grey,
+      selectedItemColor: const Color(0xff1877F2),
+      unselectedItemColor: Colors.black45,
       onTap: _onItemTapped,
       items: const [
         BottomNavigationBarItem(
