@@ -27,143 +27,306 @@ class _PostCardState extends State<PostCard> {
       if (reaction.isEmpty) {
         likeCount++;
       }
+
       reaction = value;
     });
   }
 
+  void removeReaction() {
+    setState(() {
+      if (reaction.isNotEmpty && likeCount > 0) {
+        likeCount--;
+      }
+
+      reaction = "";
+    });
+  }
+
+  void showReactionMenu() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25),
+        ),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                reactionButton("👍"),
+                reactionButton("❤️"),
+                reactionButton("😂"),
+                reactionButton("😮"),
+                reactionButton("😢"),
+                reactionButton("😡"),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget reactionButton(String emoji) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pop(context);
+        setReaction(emoji);
+      },
+      child: Text(
+        emoji,
+        style: const TextStyle(
+          fontSize: 32,
+        ),
+      ),
+    );
+  }
+
+  void openFullScreenImage() {
+    if (widget.post.imagePath == null) return;
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) {
+          return Scaffold(
+            backgroundColor: Colors.black,
+            appBar: AppBar(
+              backgroundColor: Colors.black,
+              foregroundColor: Colors.white,
+              title: const Text("Photo"),
+            ),
+            body: Center(
+              child: InteractiveViewer(
+                minScale: 0.8,
+                maxScale: 4,
+                child: Image.file(
+                  File(widget.post.imagePath!),
+                  width: double.infinity,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void showPostMenu() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(22),
+        ),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(
+                  Icons.bookmark_border,
+                ),
+                title: const Text("Save Post"),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.delete_outline,
+                  color: Colors.red,
+                ),
+                title: const Text(
+                  "Delete Post",
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  widget.onDelete();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      elevation: 6,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        horizontal: 14,
+        vertical: 9,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 16,
+            offset: const Offset(0, 5),
+          ),
+        ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// Header
+            /// পোস্টের উপরের অংশ
             Row(
               children: [
                 CircleAvatar(
-                  radius: 22,
+                  radius: 24,
                   backgroundColor: const Color(0xff1877F2),
                   child: Text(
-                    widget.post.userName.substring(0, 1).toUpperCase(),
+                    widget.post.userName
+                        .substring(0, 1)
+                        .toUpperCase(),
                     style: const TextStyle(
                       color: Colors.white,
+                      fontSize: 19,
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
+
+                const SizedBox(width: 11),
 
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment:
+                    CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        widget.post.userName,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            widget.post.userName,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          const SizedBox(width: 5),
+
+                          const Icon(
+                            Icons.verified,
+                            color: Color(0xff1877F2),
+                            size: 17,
+                          ),
+                        ],
                       ),
-                      const Text(
-                        "Just now",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                        ),
+
+                      const SizedBox(height: 2),
+
+                      const Row(
+                        children: [
+                          Text(
+                            "Just now",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
+                          ),
+
+                          SizedBox(width: 4),
+
+                          Icon(
+                            Icons.public,
+                            size: 13,
+                            color: Colors.grey,
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
 
                 IconButton(
-                  icon: const Icon(Icons.more_horiz),
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return SafeArea(
-                          child: Wrap(
-                            children: [
-                              ListTile(
-                                leading: const Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                ),
-                                title: const Text("Delete Post"),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  widget.onDelete();
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  },
+                  onPressed: showPostMenu,
+                  icon: const Icon(
+                    Icons.more_horiz,
+                  ),
                 ),
               ],
             ),
 
-            const SizedBox(height: 15),
+            if (widget.post.text.isNotEmpty) ...[
+              const SizedBox(height: 16),
 
-            /// Post Text
-            if (widget.post.text.isNotEmpty)
               Text(
                 widget.post.text,
                 style: const TextStyle(
                   fontSize: 16,
+                  height: 1.45,
                 ),
               ),
+            ],
 
-            if (widget.post.text.isNotEmpty)
-              const SizedBox(height: 15),
+            if (widget.post.imagePath != null) ...[
+              const SizedBox(height: 16),
 
-            /// Image
-            if (widget.post.imagePath != null)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxHeight: 450,
-                  ),
-                  child: Image.file(
-                    File(widget.post.imagePath!),
-                    width: double.infinity,
-                    fit: BoxFit.contain,
+              GestureDetector(
+                onTap: openFullScreenImage,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(17),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxHeight: 460,
+                    ),
+                    child: Image.file(
+                      File(widget.post.imagePath!),
+                      width: double.infinity,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
               ),
+            ],
 
             const SizedBox(height: 15),
 
+            /// Like ও Comment সংখ্যা
             Row(
               children: [
-                const CircleAvatar(
-                  radius: 9,
-                  backgroundColor: Color(0xff1877F2),
-                  child: Icon(
-                    Icons.thumb_up,
-                    size: 11,
-                    color: Colors.white,
+                if (likeCount > 0)
+                  Container(
+                    width: 24,
+                    height: 24,
+                    decoration: const BoxDecoration(
+                      color: Color(0xff1877F2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.thumb_up,
+                      size: 13,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
 
-                const SizedBox(width: 6),
+                if (likeCount > 0)
+                  const SizedBox(width: 6),
 
                 Text(
-                  "$likeCount",
+                  likeCount == 0
+                      ? "Be the first to react"
+                      : "$likeCount reactions",
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
+                    color: Colors.grey,
+                    fontSize: 13,
                   ),
                 ),
 
@@ -173,124 +336,101 @@ class _PostCardState extends State<PostCard> {
                   "0 Comments",
                   style: TextStyle(
                     color: Colors.grey,
+                    fontSize: 13,
                   ),
                 ),
               ],
             ),
 
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
+              padding: EdgeInsets.symmetric(
+                vertical: 10,
+              ),
               child: Divider(
-                thickness: 1,
+                height: 1,
               ),
             ),
 
+            /// নিচের Button
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                TextButton.icon(
-                  onPressed: () {
-                    setReaction("👍");
-                  },
-                  onLongPress: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return SafeArea(
-                          child: Wrap(
-                            children: [
-                              ListTile(
-                                leading: const Text("👍", style: TextStyle(fontSize: 28)),
-                                title: const Text("Like"),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  setReaction("👍");
-                                },
-                              ),
-                              ListTile(
-                                leading: const Text("❤️", style: TextStyle(fontSize: 28)),
-                                title: const Text("Love"),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  setReaction("❤️");
-                                },
-                              ),
-                              ListTile(
-                                leading: const Text("😂", style: TextStyle(fontSize: 28)),
-                                title: const Text("Haha"),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  setReaction("😂");
-                                },
-                              ),
-                              ListTile(
-                                leading: const Text("😮", style: TextStyle(fontSize: 28)),
-                                title: const Text("Wow"),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  setReaction("😮");
-                                },
-                              ),
-                              ListTile(
-                                leading: const Text("😢", style: TextStyle(fontSize: 28)),
-                                title: const Text("Sad"),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  setReaction("😢");
-                                },
-                              ),
-                              ListTile(
-                                leading: const Text("😡", style: TextStyle(fontSize: 28)),
-                                title: const Text("Angry"),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  setReaction("😡");
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  icon: Text(
-                    reaction.isEmpty ? "👍" : reaction,
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  label: const Text("React"),
-                ),
-
-                TextButton.icon(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const CommentScreen(),
+                Expanded(
+                  child: TextButton.icon(
+                    onPressed: () {
+                      if (reaction.isEmpty) {
+                        setReaction("👍");
+                      } else {
+                        removeReaction();
+                      }
+                    },
+                    onLongPress: showReactionMenu,
+                    icon: Text(
+                      reaction.isEmpty
+                          ? "👍"
+                          : reaction,
+                      style: const TextStyle(
+                        fontSize: 20,
                       ),
-                    );
-                  },
-                  icon: const Icon(Icons.comment_outlined),
-                  label: const Text(
-                    "Comment",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
+                    ),
+                    label: Text(
+                      reaction.isEmpty
+                          ? "Like"
+                          : "Reacted",
+                      style: TextStyle(
+                        color: reaction.isEmpty
+                            ? Colors.grey.shade700
+                            : const Color(
+                          0xff1877F2,
+                        ),
+                        fontWeight:
+                        FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
 
-                TextButton.icon(
-                  onPressed: () async {
-                    await SharePlus.instance.share(
-                      ShareParams(
-                        text: widget.post.text,
+                Expanded(
+                  child: TextButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                          const CommentScreen(),
+                        ),
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.comment_outlined,
+                    ),
+                    label: const Text(
+                      "Comment",
+                      style: TextStyle(
+                        fontWeight:
+                        FontWeight.w600,
                       ),
-                    );
-                  },
-                  icon: const Icon(Icons.share_outlined),
-                  label: const Text(
-                    "Share",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+
+                Expanded(
+                  child: TextButton.icon(
+                    onPressed: () async {
+                      await SharePlus.instance.share(
+                        ShareParams(
+                          text: widget.post.text,
+                        ),
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.share_outlined,
+                    ),
+                    label: const Text(
+                      "Share",
+                      style: TextStyle(
+                        fontWeight:
+                        FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),

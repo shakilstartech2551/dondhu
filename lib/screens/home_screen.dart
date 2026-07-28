@@ -8,6 +8,8 @@ import '../widgets/create_post_box.dart';
 import '../models/post_model.dart';
 import '../models/story_model.dart';
 import 'profile_screen.dart';
+import 'friends_screen.dart';
+import 'chat_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -183,27 +185,11 @@ const SizedBox(height: 20),
 );
 }
 Widget _buildFriendsPage() {
-  return const Center(
-    child: Text(
-      "👥 Friends",
-      style: TextStyle(
-        fontSize: 28,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-  );
+  return const FriendsScreen();
 }
 
 Widget _buildChatPage() {
-  return const Center(
-    child: Text(
-      "💬 Chat",
-      style: TextStyle(
-        fontSize: 28,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-  );
+  return const ChatScreen();
 }
 
 Widget _buildAlertsPage() {
