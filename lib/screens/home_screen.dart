@@ -10,6 +10,7 @@ import '../models/story_model.dart';
 import 'profile_screen.dart';
 import 'friends_screen.dart';
 import 'chat_screen.dart';
+import 'notification_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -193,15 +194,7 @@ Widget _buildChatPage() {
 }
 
 Widget _buildAlertsPage() {
-  return const Center(
-    child: Text(
-      "🔔 Alerts",
-      style: TextStyle(
-        fontSize: 28,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-  );
+  return const NotificationScreen();
 }
 
 Widget _buildProfilePage() {
