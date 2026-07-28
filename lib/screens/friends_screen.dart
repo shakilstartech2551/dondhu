@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'friend_profile_screen.dart';
 
 class FriendsScreen extends StatefulWidget {
   const FriendsScreen({super.key});
@@ -160,7 +161,20 @@ class _FriendsScreenState extends State<FriendsScreen> {
               itemBuilder: (context, index) {
                 final friend = filteredFriends[index];
 
-                return Container(
+                return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FriendProfileScreen(
+                            name: friend["name"],
+                            mutualFriends: friend["mutual"],
+                            online: friend["online"],
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
                   margin: const EdgeInsets.symmetric(
                     horizontal: 14,
                     vertical: 7,
@@ -300,6 +314,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                       ),
                     ],
                   ),
+                    ),
                 );
               },
             ),
