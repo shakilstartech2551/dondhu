@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'chat_screen.dart';
 
 class FriendProfileScreen extends StatefulWidget {
   final String name;
@@ -215,12 +216,11 @@ class _FriendProfileScreenState
                         Expanded(
                           child: ElevatedButton.icon(
                             onPressed: () {
-                              ScaffoldMessenger.of(
+                              Navigator.push(
                                 context,
-                              ).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    "Opening chat with ${widget.name}",
+                                MaterialPageRoute(
+                                  builder: (context) => ChatScreen(
+                                    friendName: widget.name,
                                   ),
                                 ),
                               );

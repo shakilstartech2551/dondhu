@@ -190,7 +190,9 @@ Widget _buildFriendsPage() {
 }
 
 Widget _buildChatPage() {
-  return const ChatScreen();
+  return const ChatScreen(
+    friendName: "Chat",
+  );
 }
 
 Widget _buildAlertsPage() {
